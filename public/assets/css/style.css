@@ -15,7 +15,7 @@
 
 .error {
     color: red;
-    font-size: 12px; 
+    font-size: 12px;
 }
 
 .svg-size{
@@ -27,4 +27,18 @@
 .design-btn{
     border: none;
     background: none;
+}
+
+
+.table-content
+{
+    width: 60%;
+
+}
+
+.date-forms{
+    width: 39%;
+    border-left: 1px #000 solid;
+    padding-left: 10px;
+    margin-left: 10px;
 }

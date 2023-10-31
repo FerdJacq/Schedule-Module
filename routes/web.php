@@ -37,3 +37,5 @@ Route::get('/sched-edit/{$id}',[App\Http\Controllers\ScheduleController::class,'
 
 
 Route::delete('del-sched/{id}', [App\Http\Controllers\ScheduleController::class,'delSched']);
+
+Route::post('/sched-create', [App\Http\Controllers\ScheduleController::class,'createSched']);

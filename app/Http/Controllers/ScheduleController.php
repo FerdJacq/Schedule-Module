@@ -9,13 +9,13 @@ use App\Models\User;
 
 class ScheduleController extends Controller
 {
-   
+
     public function sched(){
         return view('page.schedule');
     }
 
-    public function createSched(Request $request){
-
+    public function createSched(Request $request, $id){
+        $user = User::find($id);
         // Validate input
     $validator = Validator::make($request->all(), [
         'user_id' => 'required|exists:users,id',
@@ -28,13 +28,13 @@ class ScheduleController extends Controller
     }
 
     // Create new schedule
-    Schedule::create([
+    $schedule = Schedule::create([
         'user_id' => $request->input('user_id'),
         'date' => $request->input('date'),
         'start_time' => $request->input('start_time'),
         'end_time' => $request->input('end_time'),
     ]);
-
+    $schedule->save();
     return response()->json(['success'=>'User Registeration Complete!']);
     }
 
