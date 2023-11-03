@@ -44,11 +44,7 @@ var Schedule = {
 
         $('#createSchedule').click(function(){
             var self = this;
-            var selectedUsers = [];
-            $('input[name="users[]"]:checked').each(function() {
-                selectedUsers.push($(this).val());
-                self.apu.post.create();
-            });
+            self.apu.post.create();
         });
 
         $('button[class*=removeEmployee-]').unbind().bind('click', function () {
@@ -58,7 +54,6 @@ var Schedule = {
 				self.selectedEmployee.splice(index, 1);
                 $(".checkbox-" + id).prop('checked',false);
 				self.updateScheduleCart("#modal-schedule-cart-content")
-                console.log('uncheck');
 			}
 		});
 
@@ -98,7 +93,7 @@ var Schedule = {
 						// 'hourly' : hourly,
 						// 'incentive' : data.incentive,
                     });
-                    // self.renderSelectedEmployee("#employee-content")
+                    self.updateScheduleCart("#modal-schedule-cart-content")
                 }
 			}
 			else {
@@ -106,7 +101,7 @@ var Schedule = {
                     var index = self.selectedEmployee.findIndex(x => x.id == id);
                     if(index != -1) {
                         self.selectedEmployee.splice(index, 1);
-                        // self.renderSelectedEmployee("#employee-content")
+                        self.updateScheduleCart("#modal-schedule-cart-content")
                     }
                 }
 				//Helper.warn('Warning', 'Sorry, this employee has already selected');
@@ -115,6 +110,28 @@ var Schedule = {
             self.updateScheduleCart("#modal-schedule-cart-content")
         })
 
+        
+        $(".btn-checkall").click( function(e) {
+            e.preventDefault();
+            var clicked = false
+            $(".checked").prop("checked", !clicked);
+            clicked = !clicked;
+        });
+
+        $(".btn-uncheckall").click( function(e) {
+            e.preventDefault();
+            var clicked = true
+            $(".checked").prop("checked", !clicked);
+            clicked = !clicked;
+        });
+
+        $('a[class*=page-button-]').unbind().bind('click', function(e) {
+			e.preventDefault();			
+			page = parseInt($(this).html().trim());
+			// self.paginationType === 0 ? self.api.get.all(self.page) : self.paginationType === 1 ? self.api.get.schedulesAll(self.page) : ''
+            console.log(page);
+            self.api.get.all(page);
+		});
 	},
 
     renderSchedule: function(data){
@@ -138,6 +155,23 @@ var Schedule = {
         });
         self.addEvents();
     },
+
+    renderTablePagination : function(data)
+	{
+		var self = this;
+		$('#table-pagination div').remove();
+		$('#table-pagination').append(data);
+		$.each($('#table-pagination div a'), function(key, val)
+		{
+			var id = $(val).html().trim();
+			$(val).attr('href', '#');
+            $(val).addClass('page-button-'+ id +' pages');
+            // console.log(data);
+		});
+
+		self.addEvents();
+	},
+
     renderModalSchedule: function(data){
         var self = this;
         self.lookUpData = data;
@@ -146,7 +180,7 @@ var Schedule = {
 
             $.each(data, function(key,val){
                 var manageButton = '<button class="delsched-' + val.id + ' btn-sm design-btn"><img src="storage/images/icons/svg/delete.svg" class="svg-size"></button>'
-                + '<input type="checkbox" name="users[]" class="checkbox-'+ val.id +'" value="' + val.id + '">'
+                + '<input type="checkbox" class="checkbox-'+ val.id +' checked" value="' + val.id + '">'
 
                 let elemtHtml = '<tr>'
                         +	'<td>' + manageButton
@@ -195,30 +229,41 @@ var Schedule = {
     api : {
 		get : {
 			// Your get method
-            all:function(){
+            all:function(page){
                 var self = Schedule;
+                var params = {
+					'page' : page,
+					'limit' : 11, //9
+				};
 
                 $.ajax({
+                    
                     url: '/schedule/all',
                     type: 'GET',
-                    data:{},
+                    data:params,
                     success:function(resp){
                         if(resp.success){
-                            self.renderSchedule(resp.data);
+                            self.renderSchedule(resp.data.data);
+                            self.renderTablePagination(resp.links);
                         }
                     }
                 });
             },
-            allModal:function(){
+            allModal:function(page){
                 var self = Schedule;
+                var params = {
+					'page' : page,
+					'limit' : 11, //9
+				};
 
                 $.ajax({
                     url: '/schedule/all',
                     type: 'GET',
-                    data:{},
+                    data:params,
                     success:function(resp){
                         if(resp.success){
-                            self.renderModalSchedule(resp.data);
+                            self.renderModalSchedule(resp.data.data);
+                            self.renderTablePagination(resp.links);
 
                         }
                     }

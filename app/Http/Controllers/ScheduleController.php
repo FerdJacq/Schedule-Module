@@ -39,12 +39,11 @@ class ScheduleController extends Controller
     }
 
 
-    public function showSched(){
-        $users = User::all();
-        return response()->json([
-            'success'=>true,
-            'data' => $users
-        ]);
+    public function showSched(Request $request){
+        $users = User::offset($request->get('page'))->paginate($request->get('limit'));
+       
+        $links = str_replace('/?', '?', $users->render());
+        return response()->json(['success' => true, 'data' => $users, 'links' => $links]);
     }
 
 
