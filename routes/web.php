@@ -32,10 +32,13 @@ Route::get('/schedule', function () {
     return view('page.schedule');
 });
 Route::get('/schedule/all',[App\Http\Controllers\ScheduleController::class, 'showSched']);
+Route::get('/schedule/all/modal',[App\Http\Controllers\ScheduleController::class, 'showSchedModal']);
 
-Route::get('/sched-edit/{$id}',[App\Http\Controllers\ScheduleController::class,'editSched']);
+Route::post('/sched-edit',[App\Http\Controllers\ScheduleController::class,'editSched']);
 
 
 Route::delete('del-sched/{id}', [App\Http\Controllers\ScheduleController::class,'delSched']);
 
-Route::post('/sched-create', [App\Http\Controllers\ScheduleController::class,'createSched']);
+Route::post('/sched-create', [App\Http\Controllers\ScheduleController::class,'updateSched']);
+
+

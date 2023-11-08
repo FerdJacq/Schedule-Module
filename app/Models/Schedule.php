@@ -9,9 +9,11 @@ class Schedule extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'date', 'start_time', 'end_time'];
+    protected $fillable = ['user_id', 'date', 'time_in', 'time_out','shift_id','working_hours','breaktime','end_date'];
 
     public function user(){
-        $this->belongsTo(user::class);
+        //$this->belongsTo(user::class);
+        return $this->hasOne('App\Models\User', 'id' , 'user_id');
     }
+
 }

@@ -32,12 +32,12 @@
 
 .table-content
 {
-    width: 60%;
+    width: 49%;
 
 }
 
 .date-forms{
-    width: 39%;
+    width: 50%;
     border-left: 1px #000 solid;
     padding-left: 10px;
     margin-left: 10px;
@@ -46,3 +46,18 @@
 .checked{
     height: 8px;
 }
+
+svg.w-5.h-5{
+    display:none;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+  }
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
